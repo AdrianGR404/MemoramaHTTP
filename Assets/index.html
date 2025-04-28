@@ -1,0 +1,678 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Memorama Multijugador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/memo/archivos/1.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        html {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            height: 100%;
+            background-image: url("https://i.pinimg.com/736x/e8/81/b9/e881b9310be74e1d18c2d8c3a29eb9ec.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #adfffb;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            text-shadow: 5px 5px #932eb8;
+            font-weight: lighter;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 10% 60% 30%;
+            gap: 20px;
+        }
+
+        .memorama {
+            position: relative;
+            box-sizing:border-box;
+            width: 90vw;
+            height:contain;
+            max-width:840px;
+            aspect-ratio: 1 / 1;
+            padding: 10px;
+            margin: 0 auto;
+            display: none;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            grid-column: 2;
+            grid-row: 2 / 3;
+        }
+
+            .memorama img {
+                box-sizing: border-box;
+                box-shadow: 3px 3px 10px black;
+                height: calc(20% - 12px);
+                width: calc(20% - 12px);
+                background: navy;
+                transition: transform 0.3s;
+                border-radius: 10px;
+                transform-style: preserve-3d;
+            }
+
+        .rojo {
+            box-shadow: 0 0 10px 2px #ff0055, 0 0 20px 4px #da1452;
+            border: 2px solid #da1452;
+        }
+
+        .cyan {
+            box-shadow: 0 0 10px 2px #00ffff, 0 0 20px 4px #00ffff;
+            border: 2px solid #00ffff;
+        }
+
+
+        .memorama img:hover {
+            transform: scale(1.1);
+        }
+
+        .topbar {
+            grid-column: 2;
+            text-align: center;
+            color: white;
+            margin-top: 10px;
+        }
+        .turnoInfo {
+            grid-column: 1;
+            grid-row: 1;
+            font-size: 2em;
+        }
+        .columna {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .p1, .p2 {
+            grid-row: 2;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background-color: black;
+            padding: 10px;
+            font-size: 1.6em;
+            border-radius: 15px;
+            margin: 20px;
+            gap: 25px;
+        }
+
+        .p1 {
+            grid-column: 1;
+        }
+
+        .p2 {
+            grid-column: 3;
+        }
+
+        #login {
+            grid-column: 2;
+            text-align: center;
+            margin: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 15px #00ffff, 0 0 30px rgba(0, 255, 255, 0.3);
+            width: 300px;
+            text-align: center;
+        }
+        .login-input {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        #jugador {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #00ffff;
+            color: #adfffb;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            padding: 10px 0;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s;
+        }
+            #jugador:placeholder-shown + label {
+                color: #00ffff;
+                font-size: 14px;
+                top: 10px;
+                cursor: text;
+            }
+        .login-input label {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            color: #adfffb;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+
+        .login-button {
+            background-color: #da1452;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            padding: 12px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+        }
+            .login-button:active {
+                transform: translateY(1px);
+            }
+
+        #jugador:focus {
+            text-shadow: 0 0 5px #adfffb;
+        }
+
+        .memorama {
+            grid-column: 2;
+            border: 10px solid #00ffff;
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
+            background: black;
+            border-radius: 20px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            font-family: 'Monoton', cursive;
+            animation: neon 1.5s ease-in-out infinite alternate;
+            font-size: 3.6em;
+        }
+
+        .imgP {
+            width: 50%;
+        }
+
+        .Res {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #adfffb;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            font-family: 'Press Start 2P', monospace;
+            text-align: center;
+            text-shadow: 3px 3px #932eb8;
+            border-radius: 20px; 
+            animation: aparecer 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+            .Res h2 {
+                font-size: 2em;
+                color: #ff0055;
+                text-shadow: 0 0 10px #ff0055, 0 0 20px #da1452;
+                margin-bottom: 30px;
+            }
+
+            .Res p {
+                font-size: 1.2em;
+                margin: 10px 0;
+            }
+
+            .Res button {
+                background: #932eb8;
+                color: #adfffb;
+                border: none;
+                padding: 10px 20px;
+                margin-top: 20px;
+                font-family: 'Press Start 2P', monospace;
+                cursor: pointer;
+                border-radius: 5px;
+                text-shadow: 2px 2px #000;
+            }
+
+                .Res button:hover {
+                    background: #da1452;
+                    box-shadow: 0 0 10px 2px #ff0055;
+                }
+
+        @keyframes neon {
+            from {
+                text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            }
+
+            to {
+                text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
+            }
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @media (max-width: 1400px) {
+            body {
+                grid-template-columns: 1fr 2fr;
+                grid-template-rows: 10% 45% 45%;
+                gap: 5px;
+                font-size: 2em;
+                gap:10px;
+            }
+            .topbar{
+                font-size:1em;
+            }
+            .topbar h2{
+                font-size:1em;
+            }
+            .memorama{
+                margin:auto;
+            }
+
+            .p1, .p2 {
+                grid-column: 1;
+                width: 90%;
+                margin: 5px auto;
+                font-size: 1em;
+                padding: 5px;
+                gap: 10px;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+
+            .p1 {
+                grid-row: 2;
+            }
+
+            .p2 {
+                grid-row: 3;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .Res h2 {
+                font-size: 1.3em;
+            }
+            .Res p {
+                font-size: 0.9em;
+            }
+            .Res button {
+                padding: 8px 15px;
+                font-size: 0.8em;
+            }
+            body {
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto auto auto auto; 
+                gap: 10px;
+                font-size: 14px;
+            }
+            .topbar {
+                grid-column: 1;
+                grid-row: 1; 
+                margin-bottom: 0;
+            }
+            
+            #login {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            .memorama {
+                width: 95vw;
+                max-width: none;
+                gap: 2px;
+                padding: 5px;
+                grid-column: 1;
+                grid-row: 2; 
+                margin: 0 auto;
+            }
+            .p1, .p2 {
+                grid-column: 1;
+                width: 90%;
+                margin: 5px auto;
+                font-size: 1em;
+                padding: 5px;
+                gap: 10px;
+                flex-direction: row; 
+                justify-content: space-around;
+            }
+            .p1 {
+                grid-row: 3; 
+            }
+            .p2 {
+                grid-row: 4; 
+            }
+            .imgP {
+                width: 20%; 
+            }
+            .topbar h2 {
+                font-size: 2em;
+                margin-bottom: 5px;
+            }
+            #Cargando, #turnoinfo, #turno {
+                font-size: 0.8em;
+            }
+            .resultado-final {
+                width: 90%;
+                font-size: 1em;
+                padding: 15px;
+            }
+                .resultado-final button {
+                    padding: 8px 15px;
+                    font-size: 0.8em;
+                }
+            .turnoInfo {
+                display: flex; 
+                flex-direction: column ;
+                justify-content: flex-end;
+                font-size:1.4em;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <audio id="musicaFondo" src="/memo/archivos/musiquita.mp3" loop autoplay></audio>
+    <div class="topbar columna">
+        <h2>MEMORAMA</h2>
+        <h2 id="Cargando">
+            Buscando contrincante....
+        </h2>
+    </div>
+    <div class="topbar turnoInfo"><label id="turnoinfo"></label><label id="turno"></label></div>
+
+    <div id="login" class="columna">
+        <div class="login-input">
+            <input type="text" id="jugador" placeholder=" " />
+            <label for="jugador">Nombre del Jugador</label>
+        </div>
+        <button class="login-button">
+            <span class="button-text">Entrar al juego</span>
+        </button>
+    </div>
+    <div class="memorama columna">
+        <div class="Res">
+
+        </div>
+    </div>
+    <div class="columna p1" id="p1">
+        <label id="j1"></label>
+        <img class="imgP" src="/memo/archivos/player1.png" />
+        <label>Puntos:</label><label id="score1"></label>
+    </div>
+    <div class="columna p2" id="p2">
+        <label id="j2"></label>
+        <img class="imgP" src="/memo/archivos/player2.png" />
+        <label>Puntos:</label><label id="score2"></label>
+    </div>
+    <script>
+        const musica = document.getElementById("musicaFondo");
+        const imagenes = [
+            "https://i.pinimg.com/736x/6c/ef/e2/6cefe26e8be1f892e719a3804f366c0b.jpg",
+            "https://i.pinimg.com/736x/41/a6/1b/41a61b4bbbc8068e6c8e65f3450c3331.jpg",
+            "https://i.pinimg.com/736x/39/b3/94/39b394a150c30f8839ba220bcf3aba8e.jpg",
+            "https://i.pinimg.com/736x/20/11/98/2011980bdcaa0675ceb503a9ec2d6525.jpg",
+            "https://i.pinimg.com/736x/ef/ea/1f/efea1fea03c6c4a462f4063e3eebb050.jpg",
+            "https://i.pinimg.com/736x/4a/b2/ad/4ab2ad2accb0fcfc6f26e57719803987.jpg",
+            "https://i.pinimg.com/736x/59/d4/3e/59d43e10ce467aada9bdd6374f84d26c.jpg",
+            "https://i.pinimg.com/736x/f3/28/bc/f328bc54e0d7c373016fde54609d27b2.jpg",
+            "https://i.pinimg.com/736x/54/8f/77/548f7785297b958c4fd942ef3612ad22.jpg",
+            "https://i.pinimg.com/736x/1f/6f/41/1f6f414ea1c38546fa5c41f22bb4189d.jpg"
+        ];
+        const memo = document.querySelector(".memorama");
+        const loginDiv = document.getElementById("login");
+        const turnoInfo = document.getElementById("turnoInfo");
+        const resDiv = document.querySelector('.Res');
+        const Buscando = document.getElementById("Cargando");
+        const p1 = document.querySelector("#p1");
+        const p2 = document.querySelector("#p2");
+        Buscando.style.display = "none";
+        memo.style.display = "none";
+        let turnoinfo = document.querySelector("#turnoinfo");
+        let turno = document.querySelector("#turno");
+        let j1 = document.querySelector("#j1");
+        let j2 = document.querySelector("#j2");
+        let jugador = "", jugador2 = "";
+        let idSala = 0;
+        let puntosJ1 = document.querySelector("#score1");
+        let puntosJ2 = document.querySelector("#score2");
+        let adivinadas = 0;
+        let carta = null;
+        let c = 0;
+        let cartas = [];
+        let bloqueado = false;
+
+        for (let i = 0; i < 20; i++) {
+            let img = document.createElement("img");
+            img.src = "https://i.pinimg.com/736x/75/d2/26/75d2266cded37b2c0a2e17caa66e62ec.jpg";
+            memo.appendChild(img);
+        }
+
+        let Tablero = document.querySelectorAll("img");
+
+        document.querySelector("button").addEventListener("click", async function () {
+            musica.volume = 0.5;
+            musica.play();
+
+            jugador = document.getElementById("jugador").value.trim();
+            if (jugador === "") {
+                alert("Por favor, ingresa tu nombre para jugar.");
+                return;
+            }
+            document.querySelector("button").disabled = true;
+
+            let json = { Nombre: jugador };
+            loginDiv.style.display = "none";
+            Buscando.style.display = "block";
+            let response = await fetch("/memo/iniciar/", {
+                method: "POST",
+                body: JSON.stringify(json),
+                headers: {
+                    "content-type": "application/json"
+                }
+            });
+            if (response.ok) {
+                Buscando.style.display = "none";
+
+                let juego = await response.json();
+                console.log(juego);
+                cartas = juego.Tablero;
+                p1.style.display = "flex";
+                p2.style.display = "flex";
+
+                j1.innerHTML = juego.Jugador1;
+                j2.innerHTML = juego.Jugador2;
+                jugador2 = juego.Jugador2;
+                idSala = juego.IdSala;
+
+                turnoinfo.innerText = "Turno de:";
+                turno.innerText = juego.Turno;
+
+                if (juego.Turno !== jugador) {
+                    esperar();
+                }
+                else {
+                    estado(idSala);
+                }
+                memo.style.display = "flex";
+            }
+        });
+
+        memo.addEventListener("click", async function (e) {
+            if (!carta && e.target.tagName === "IMG" && !e.target.classList.contains("rojo") && !e.target.classList.contains("cyan") && turno.innerHTML === jugador && bloqueado === false) {
+                bloqueado = true;
+                jugada(e.target);
+            }
+        });
+
+        async function jugada(e) {
+            let img = e;
+            let indice = Array.from(memo.querySelectorAll("img")).indexOf(img);
+            carta = indice;
+            c++;
+            img.src = imagenes[cartas[indice]];
+            img.style.transform = "rotateY(180deg)";
+            let json = { IdSala: idSala, Nombre: jugador, Carta: carta };
+            let response = await fetch("/memo/jugada/", {
+                method: "POST",
+                body: JSON.stringify(json),
+                headers: {
+                    "content-type": "application/json"
+                }
+            });
+            if (response.ok) {
+                let juego = await response.json();
+                console.log("Actualizar de Jugada");
+                Actualizar(juego);
+                if (c == 2) {
+                    setTimeout(() => {
+                        estado(idSala);
+                    }, 1000);
+                    c = 0;
+                } else {
+                    bloqueado = false;
+                    memo.style.display = "flex";
+                }
+                carta = null;
+            }
+
+
+        }
+
+        async function esperar() {
+            if (resDiv.style.display === 'flex') {
+                memo.style.pointerEvents = "auto";
+                return;
+            }
+            memo.disabled = "true";
+            memo.style.pointerEvents = "none";
+            const json = { IdSala: idSala, Nombre: jugador };
+            let response = await fetch("/memo/esperando/", {
+                method: "POST",
+                body: JSON.stringify(json),
+                headers: {
+                    "content-type": "application/json"
+                }
+            });
+            if (response.ok) {
+                let juego = await response.json();
+                console.log("Actualizar de Esperar");
+                Actualizar(juego);
+                if (juego.Turno === jugador) {
+                    setTimeout(() => {
+                        estado(idSala);
+                    }, 1000);
+                    memo.style.pointerEvents = "auto";
+                } else {
+                    esperar();
+                }
+            }
+
+        }
+
+        async function estado(id) {
+            bloqueado = false;
+            let response = await fetch(`/memo/estado/?idSala=${id}`);
+            if (response.ok) {
+                let juego = await response.json();
+                console.log("Actualizar de Estado");
+                Actualizar(juego);
+                if (turno.innerText === jugador) {
+                    memo.style.pointerEvents = "auto";
+                    carta = null;
+                } else {
+                    setTimeout(() => {
+                        esperar();
+                    }, 1000);
+                }
+            }
+
+
+        }
+
+        function Actualizar(juego) {
+
+            console.log(juego);
+            puntosJ1.innerHTML = juego.PuntosJ1;
+            puntosJ2.innerHTML = juego.PuntosJ2;
+            turno.innerHTML = juego.Turno;
+            let Tab = juego.Tablero;
+            for (let i = 0; i < 20; i++) {
+                if (Tab[i] == 1 || Tab[i] == 2) {
+                    Tablero[i].style.transform = "rotateY(180deg)";
+                    Tablero[i].src = imagenes[cartas[i]];
+                    if (Tab[i] === 1) {
+                        Tablero[i].classList.add("rojo");
+                    } else {
+                        Tablero[i].classList.add("cyan");
+                    }
+                } else {
+                    Tablero[i].src = "https://i.pinimg.com/736x/75/d2/26/75d2266cded37b2c0a2e17caa66e62ec.jpg";
+                    Tablero[i].style.transform = "rotateY(0deg)";
+                    Tablero[i].classList.remove("rojo", "cyan");
+                }
+
+            }
+            if (juego.Resultado) {
+                mostrarResultado(juego);
+            }
+        }
+
+        function mostrarResultado(juego) {
+            resDiv.innerHTML = `
+            <h2>${juego.Resultado}</h2>
+            <p>${juego.Jugador1}: ${juego.PuntosJ1} pts</p>
+            <p>${juego.Jugador2}: ${juego.PuntosJ2} pts</p>
+            <button onclick="reiniciarJuego()">Volver a Jugar</button>
+        `;
+            resDiv.style.display = 'flex';
+
+            bloqueado = true;
+            memo.style.pointerEvents = 'none';
+        }
+
+        function reiniciarJuego() {
+            location.reload();
+        }
+
+        window.addEventListener('load', () => {
+            console.log("LooooadListener");
+            if (!navigator.onLine) {
+                alert("No hay conexión a internet. Conéctate para jugar.");
+            }
+        });
+
+        window.addEventListener('online', () => {
+            console.log("OnlineListener");
+            if (idSala && jugador) {
+                estado(idSala);
+            }
+        });
+    </script>
+</body>
+</html>
