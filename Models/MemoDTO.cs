@@ -17,5 +17,6 @@ namespace MemoramaHTTP.Models
         public int PuntosJ2 { get; set; }
         public string Resultado {  get; set; }
         public int Estado { get; set; }
+        public string Alert { get; set; }
     }
 }

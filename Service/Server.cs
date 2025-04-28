@@ -199,7 +199,6 @@ namespace MemoramaHTTP.Service
                                         {
                                             s.AgregarJugador(jugador.Nombre, ip);
                                             SalasActivas?.Invoke(s);
-
                                         }
                                         while (s.EstaCompleto == false)
                                         {
@@ -260,9 +259,21 @@ namespace MemoramaHTTP.Service
                                     }
                                     else
                                     {
+                                        if (jugador.Nombre == s.Jugador1)
+                                        {
+                                            var memo1 = new MemoDTO()
+                                            {
+                                                Alert = "Este nombre ya existe"
+                                            };
+                                            byte[] dato1 = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(memo1));
+                                            context.Response.ContentLength64 = dato1.Length;
+                                            context.Response.ContentType = "application/json";
+                                            context.Response.OutputStream.Write(dato1);
+                                            context.Response.StatusCode = 200;
+                                            break;
+                                        }
                                         s.AgregarJugador(jugador.Nombre, ip);
                                         SalasActivas?.Invoke(s);
-
                                     }
                                     while (s.EstaCompleto == false)
                                     {

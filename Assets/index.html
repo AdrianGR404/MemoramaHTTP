@@ -497,29 +497,34 @@
                 }
             });
             if (response.ok) {
-                Buscando.style.display = "none";
-
                 let juego = await response.json();
-                console.log(juego);
-                cartas = juego.Tablero;
-                p1.style.display = "flex";
-                p2.style.display = "flex";
+                if (juego.Alert == null) {
+                    Buscando.style.display = "none";
+                    console.log(juego);
+                    cartas = juego.Tablero;
+                    p1.style.display = "flex";
+                    p2.style.display = "flex";
 
-                j1.innerHTML = juego.Jugador1;
-                j2.innerHTML = juego.Jugador2;
-                jugador2 = juego.Jugador2;
-                idSala = juego.IdSala;
+                    j1.innerHTML = juego.Jugador1;
+                    j2.innerHTML = juego.Jugador2;
+                    jugador2 = juego.Jugador2;
+                    idSala = juego.IdSala;
 
-                turnoinfo.innerText = "Turno de:";
-                turno.innerText = juego.Turno;
+                    turnoinfo.innerText = "Turno de:";
+                    turno.innerText = juego.Turno;
 
-                if (juego.Turno !== jugador) {
-                    esperar();
+                    if (juego.Turno !== jugador) {
+                        esperar();
+                    }
+                    else {
+                        estado(idSala);
+                    }
+                    memo.style.display = "flex";
+                } else {
+                    alert("Si me hace el favor de escoger otro nombre, ese ya esta ocupado");
+                    reiniciarJuego();
                 }
-                else {
-                    estado(idSala);
-                }
-                memo.style.display = "flex";
+                
             }
         });
 
